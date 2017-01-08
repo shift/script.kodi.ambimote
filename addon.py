@@ -62,15 +62,10 @@ while not xbmc.abortRequested:
                                 rgb = (pixels[row + x * 4 + 2], pixels[row + x * 4 + 1], pixels[row + x * 4])
                                 leds.append(struct.pack('BBB',*rgb).encode('hex'))
                 print(len(str(leds)))
-                #try:			
-                send_to_device(s,str(leds))
-                #except:
-                print "Caught exception socket.error"
-
-#		red = (sum(red)/len(red));
-#		green = (sum(green)/len(green));
-#		blue = (sum(blue)/len(blue));
-
+                try:			
+                    send_to_device(s,str(leds))
+                except:
+                    print "Caught exception socket.error"
 
 s.close()
 
