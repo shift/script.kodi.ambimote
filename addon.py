@@ -45,34 +45,32 @@ while not xbmc.abortRequested:
 		width = capture.getWidth();
 		height = capture.getHeight();
 		pixels = capture.getImage(1000);
-
+                print("Width: %s, Height: %s" % (width, height))
 		if useLegacyApi:
 			capture.waitForCaptureStateChangeEvent(10)
 			
 		pixels = capture.getImage(1000)
 
-		red = [];
-		green = [];
-		blue = [];
-
+		reds = [];
+		greens = [];
+		blues = [];
+                leds = []
+                rgb = (0,0,0)
 		for y in range(height):
 			row = width * y * 4
 			for x in range(width):
-				red.append(pixels[row + x * 4 + 2]);
-				green.append(pixels[row + x * 4 + 1]);
-				blue.append(pixels[row + x * 4]);
-
+                                rgb = (pixels[row + x * 4 + 2], pixels[row + x * 4 + 1], pixels[row + x * 4])
+                                leds.append(struct.pack('BBB',*rgb).encode('hex'))
+                print(len(str(leds)))
+                #try:			
+                send_to_device(s,str(leds))
+                #except:
+                print "Caught exception socket.error"
 
 #		red = (sum(red)/len(red));
 #		green = (sum(green)/len(green));
 #		blue = (sum(blue)/len(blue));
 
-		packetArray = "%s,%s,%s" % (red,green,blue)
-
-		try:			
-			send_to_device(s,packetArray)
-		except:
-			print "Caught exception socket.error"
 
 s.close()
 
